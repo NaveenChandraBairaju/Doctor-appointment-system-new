@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Appointment Details - Doctor{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{{ url_for('doctor_dashboard') }}" class="btn btn-secondary mb-3">← Back to Dashboard</a>
+            <h2>Appointment Details & Medical Records</h2>
+            <hr>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5>Patient Information</h5>
+                </div>
+                <div class="card-body">
+                    <p><strong>Name:</strong> {{ appointment.patient.name }}</p>
+                    <p><strong>Email:</strong> {{ appointment.patient.email }}</p>
+                    <p><strong>Phone:</strong> {{ appointment.patient.phone or 'N/A' }}</p>
+                    <p><strong>Appointment:</strong> {{ appointment.appointment_time.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                    <p><strong>Status:</strong> <span class="badge bg-{% if appointment.status == 'completed' %}success{% elif appointment.status == 'approved' %}primary{% elif appointment.status == 'pending' %}warning{% else %}secondary{% endif %}">{{ appointment.status.upper() }}</span></p>
+                </div>
+            </div>
+
+            <div class="card mt-3">
+                <div class="card-header bg-info text-white">
+                    <h5>Patient's Symptoms</h5>
+                </div>
+                <div class="card-body">
+                    <p>{{ appointment.symptoms or 'No symptoms recorded' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5>Medical Records</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST">
+                        <div class="mb-3">
+                            <label for="diagnosis" class="form-label"><strong>Diagnosis</strong></label>
+                            <textarea class="form-control" id="diagnosis" name="diagnosis" rows="3" placeholder="Enter diagnosis...">{{ appointment.diagnosis or '' }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="prescription" class="form-label"><strong>Prescription</strong></label>
+                            <textarea class="form-control" id="prescription" name="prescription" rows="5" placeholder="Enter prescribed medicines and dosage...">{{ appointment.prescription or '' }}</textarea>
+                            <small class="text-muted">Example: Paracetamol 500mg - 2 times daily for 3 days</small>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="treatment_plan" class="form-label"><strong>Treatment Plan</strong></label>
+                            <textarea class="form-control" id="treatment_plan" name="treatment_plan" rows="4" placeholder="Enter treatment recommendations...">{{ appointment.treatment_plan or '' }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="test_results" class="form-label"><strong>Test Results / Lab Reports</strong></label>
+                            <textarea class="form-control" id="test_results" name="test_results" rows="3" placeholder="Enter test results or lab report notes...">{{ appointment.test_results or '' }}</textarea>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="follow_up_date" class="form-label"><strong>Follow-up Date (Optional)</strong></label>
+                            <input type="date" class="form-control" id="follow_up_date" name="follow_up_date" value="{{ appointment.follow_up_date.strftime('%Y-%m-%d') if appointment.follow_up_date else '' }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="doctor_notes" class="form-label"><strong>Private Doctor Notes</strong></label>
+                            <textarea class="form-control" id="doctor_notes" name="doctor_notes" rows="3" placeholder="Private notes (not visible to patient)...">{{ appointment.doctor_notes or '' }}</textarea>
+                            <small class="text-muted">These notes are only visible to you and other doctors</small>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" id="mark_completed" name="mark_completed" value="1" {% if appointment.status == 'completed' %}checked disabled{% endif %}>
+                            <label class="form-check-label" for="mark_completed">
+                                Mark this appointment as completed
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn btn-success btn-lg">Save Medical Records</button>
+                        <a href="{{ url_for('doctor_dashboard') }}" class="btn btn-secondary btn-lg">Cancel</a>
+                    </form>
+                </div>
+            </div>
+
+            {% if appointment.completed_at %}
+            <div class="alert alert-info mt-3">
+                <strong>Completed on:</strong> {{ appointment.completed_at.strftime('%B %d, %Y at %I:%M %p') }}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

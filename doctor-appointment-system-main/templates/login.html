@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="login-card">
+                <div class="login-header">
+                    <h2 class="text-center mb-4">
+                        <i class="fas fa-user-circle"></i> Welcome Back
+                    </h2>
+                    <p class="text-center text-muted">Sign in to access your account</p>
+                </div>
+
+                <!-- Login Type Tabs -->
+                <div class="login-tabs">
+                    <a href="{{ url_for('login', user_type='patient') }}" 
+                       class="login-tab {% if user_type == 'patient' %}active{% endif %}">
+                        <i class="fas fa-user"></i>
+                        <span>Patient</span>
+                    </a>
+                    <a href="{{ url_for('login', user_type='doctor') }}" 
+                       class="login-tab {% if user_type == 'doctor' %}active{% endif %}">
+                        <i class="fas fa-user-md"></i>
+                        <span>Doctor</span>
+                    </a>
+                    <a href="{{ url_for('login', user_type='hospital_admin') }}" 
+                       class="login-tab {% if user_type == 'hospital_admin' %}active{% endif %}">
+                        <i class="fas fa-hospital"></i>
+                        <span>Hospital</span>
+                    </a>
+                </div>
+
+                <div class="card-body p-4">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" action="{{ url_for('login', next=next) }}" class="login-form">
+                        <input type="hidden" name="user_type" value="{{ user_type }}">
+                        
+                        <div class="form-group mb-4">
+                            <label for="email" class="form-label">
+                                <i class="fas fa-envelope"></i> Email Address
+                            </label>
+                            <input type="email" class="form-control form-control-lg" id="email" name="email" 
+                                   placeholder="Enter your email" required autofocus>
+                        </div>
+
+                        <div class="form-group mb-4">
+                            <label for="password" class="form-label">
+                                <i class="fas fa-lock"></i> Password
+                            </label>
+                            <input type="password" class="form-control form-control-lg" id="password" name="password" 
+                                   placeholder="Enter your password" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">
+                            <i class="fas fa-sign-in-alt"></i> Sign In
+                        </button>
+
+                        <div class="text-center">
+                            {% if user_type == 'patient' %}
+                                <p class="mb-0">Don't have an account? 
+                                    <a href="{{ url_for('register', user_type='patient') }}" class="register-link">
+                                        Register as Patient
+                                    </a>
+                                </p>
+                            {% elif user_type == 'hospital_admin' %}
+                                <p class="mb-0">New hospital? 
+                                    <a href="{{ url_for('register_hospital') }}" class="register-link">
+                                        Register Hospital
+                                    </a>
+                                </p>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .login-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .login-header {
+        background: linear-gradient(135deg, #4e73df 0%, #36b9cc 100%);
+        color: white;
+        padding: 40px 30px 30px;
+    }
+
+    .login-header h2 {
+        font-weight: 700;
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+
+    .login-header i {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        animation: pulse 2s infinite;
+    }
+
+    .login-tabs {
+        display: flex;
+        background: #f8f9fc;
+        padding: 10px;
+        gap: 10px;
+    }
+
+    .login-tab {
+        flex: 1;
+        text-align: center;
+        padding: 15px 10px;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #5a5c69;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        background: white;
+        border: 2px solid transparent;
+    }
+
+    .login-tab i {
+        display: block;
+        font-size: 1.5rem;
+        margin-bottom: 5px;
+    }
+
+    .login-tab:hover {
+        color: #4e73df;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .login-tab.active {
+        background: linear-gradient(135deg, #4e73df 0%, #36b9cc 100%);
+        color: white;
+        border-color: #4e73df;
+        box-shadow: 0 5px 20px rgba(78, 115, 223, 0.3);
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #5a5c69;
+        margin-bottom: 10px;
+    }
+
+    .form-label i {
+        color: #4e73df;
+        margin-right: 5px;
+    }
+
+    .form-control {
+        border: 2px solid #e3e6f0;
+        border-radius: 10px;
+        padding: 12px 20px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.15);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #4e73df 0%, #36b9cc 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 15px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(78, 115, 223, 0.4);
+    }
+
+    .btn-primary:active {
+        transform: translateY(0);
+    }
+
+    .register-link {
+        color: #4e73df;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .register-link:hover {
+        color: #36b9cc;
+        text-decoration: underline;
+    }
+
+    .alert {
+        border-radius: 10px;
+        border: none;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>{{ hospital.name }}</h2>
+            <p class="text-muted">{{ hospital.address }}</p>
+            <p><strong>Contact:</strong> {{ hospital.contact }}</p>
+            {% if hospital.description %}
+            <p>{{ hospital.description }}</p>
+            {% endif %}
+            <hr>
+        </div>
+    </div>
+
+    <h3 class="mb-4">Our Doctors</h3>
+    
+    {% if hospital.doctors %}
+    <div class="row">
+        {% for doctor in hospital.doctors %}
+        <div class="col-md-6 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ doctor.user.name }}</h5>
+                    <p class="card-text">
+                        <strong>Specialization:</strong> {{ doctor.specialization }}<br>
+                        <strong>Experience:</strong> {{ doctor.experience }} years<br>
+                        <strong>Consultation Fee:</strong> ₹{{ doctor.consultation_fee }}
+                    </p>
+                    {% if doctor.about %}
+                    <p class="text-muted">{{ doctor.about }}</p>
+                    {% endif %}
+                    
+                    {% if session.get('user_type') == 'patient' %}
+                    <a href="{{ url_for('book_appointment', doctor_id=doctor.id) }}" class="btn btn-primary">Book Appointment</a>
+                    {% else %}
+                    <a href="{{ url_for('login', user_type='patient') }}" class="btn btn-outline-primary">Login to Book</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <p>No doctors available at this hospital yet.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

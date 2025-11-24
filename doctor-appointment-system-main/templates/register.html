@@ -1,0 +1,299 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="register-card">
+                <div class="register-header">
+                    <h2 class="text-center mb-3">
+                        <i class="fas fa-user-plus"></i> Create Your Account
+                    </h2>
+                    <p class="text-center">Join SmartClinic for better healthcare management</p>
+                </div>
+
+                <div class="card-body p-4">
+                    {% with messages = get_flashed_messages(with_categories=true) %}
+                        {% if messages %}
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                    {% endwith %}
+
+                    <form method="POST" class="register-form">
+                        <!-- User Type Selection -->
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-user-tag"></i> Account Type</h5>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="user_type" class="form-label">Register as</label>
+                                    <select class="form-select form-select-lg" id="user_type" name="user_type" required onchange="toggleFields()">
+                                        <option value="">Choose...</option>
+                                        <option value="patient">Patient</option>
+                                        <option value="doctor">Doctor</option>
+                                        <option value="hospital_admin">Hospital Administrator</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Basic Information -->
+                        <div class="form-section">
+                            <h5 class="section-title"><i class="fas fa-id-card"></i> Basic Information</h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" class="form-label">Full Name *</label>
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter your full name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="email" class="form-label">Email Address *</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="your@email.com" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" class="form-label">Password *</label>
+                                    <input type="password" class="form-control" id="password" name="password" placeholder="Create a strong password" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="phone" class="form-label">Phone Number *</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" placeholder="+1 234 567 8900" required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Patient Details (shown only for patients) -->
+                        <div class="form-section" id="patient-details" style="display: none;">
+                            <h5 class="section-title"><i class="fas fa-heartbeat"></i> Health Information</h5>
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label for="age" class="form-label">Age</label>
+                                    <input type="number" class="form-control" id="age" name="age" placeholder="25" min="1" max="150">
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="gender" class="form-label">Gender</label>
+                                    <select class="form-select" id="gender" name="gender">
+                                        <option value="">Select...</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                        <option value="Other">Other</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 mb-3">
+                                    <label for="blood_group" class="form-label">Blood Group</label>
+                                    <select class="form-select" id="blood_group" name="blood_group">
+                                        <option value="">Select...</option>
+                                        <option value="A+">A+</option>
+                                        <option value="A-">A-</option>
+                                        <option value="B+">B+</option>
+                                        <option value="B-">B-</option>
+                                        <option value="AB+">AB+</option>
+                                        <option value="AB-">AB-</option>
+                                        <option value="O+">O+</option>
+                                        <option value="O-">O-</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="height" class="form-label">Height (cm)</label>
+                                    <input type="number" class="form-control" id="height" name="height" placeholder="170" step="0.1" min="50" max="300">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="weight" class="form-label">Weight (kg)</label>
+                                    <input type="number" class="form-control" id="weight" name="weight" placeholder="70" step="0.1" min="10" max="500">
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="address" class="form-label">Address</label>
+                                    <textarea class="form-control" id="address" name="address" rows="2" placeholder="Enter your full address"></textarea>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="emergency_contact" class="form-label">Emergency Contact</label>
+                                    <input type="tel" class="form-control" id="emergency_contact" name="emergency_contact" placeholder="+1 234 567 8900">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Doctor Details -->
+                        <div class="form-section" id="doctor-details" style="display: none;">
+                            <h5 class="section-title"><i class="fas fa-stethoscope"></i> Professional Information</h5>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="specialization" class="form-label">Specialization</label>
+                                    <input type="text" class="form-control" id="specialization" name="specialization" placeholder="e.g., Cardiologist">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="experience" class="form-label">Years of Experience</label>
+                                    <input type="number" class="form-control" id="experience" name="experience" placeholder="5" min="0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hospital Details -->
+                        <div class="form-section" id="hospital-details" style="display: none;">
+                            <h5 class="section-title"><i class="fas fa-hospital"></i> Hospital Information</h5>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <label for="hospital_name" class="form-label">Hospital Name</label>
+                                    <input type="text" class="form-control" id="hospital_name" name="hospital_name" placeholder="Enter hospital name">
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="hospital_address" class="form-label">Hospital Address</label>
+                                    <textarea class="form-control" id="hospital_address" name="hospital_address" rows="2" placeholder="Enter hospital address"></textarea>
+                                </div>
+                                <div class="col-md-12 mb-3">
+                                    <label for="hospital_description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="hospital_description" name="hospital_description" rows="2" placeholder="Brief description about the hospital"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-4">
+                            <button type="submit" class="btn btn-primary btn-lg px-5">
+                                <i class="fas fa-user-plus"></i> Create Account
+                            </button>
+                        </div>
+
+                        <div class="text-center mt-3">
+                            <p class="mb-0">Already have an account? 
+                                <a href="{{ url_for('login') }}" class="login-link">Sign In</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .register-card {
+        background: #ffffff;
+        border-radius: 20px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+        overflow: hidden;
+        animation: fadeInUp 0.6s ease;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .register-header {
+        background: linear-gradient(135deg, #4e73df 0%, #36b9cc 100%);
+        color: white;
+        padding: 40px 30px;
+    }
+
+    .register-header h2 {
+        font-weight: 700;
+        font-size: 2rem;
+    }
+
+    .register-header i {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+    }
+
+    .form-section {
+        background: #f8f9fc;
+        padding: 25px;
+        border-radius: 15px;
+        margin-bottom: 25px;
+    }
+
+    .section-title {
+        color: #4e73df;
+        font-weight: 700;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e3e6f0;
+    }
+
+    .section-title i {
+        margin-right: 10px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        color: #5a5c69;
+        margin-bottom: 8px;
+    }
+
+    .form-control, .form-select {
+        border: 2px solid #e3e6f0;
+        border-radius: 10px;
+        padding: 12px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: #4e73df;
+        box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.15);
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #4e73df 0%, #36b9cc 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 15px 40px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(78, 115, 223, 0.4);
+    }
+
+    .login-link {
+        color: #4e73df;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .login-link:hover {
+        color: #36b9cc;
+        text-decoration: underline;
+    }
+
+    .alert {
+        border-radius: 10px;
+        border: none;
+    }
+</style>
+
+<script>
+function toggleFields() {
+    const userType = document.getElementById('user_type').value;
+    const patientDetails = document.getElementById('patient-details');
+    const doctorDetails = document.getElementById('doctor-details');
+    const hospitalDetails = document.getElementById('hospital-details');
+    
+    // Hide all sections
+    patientDetails.style.display = 'none';
+    doctorDetails.style.display = 'none';
+    hospitalDetails.style.display = 'none';
+    
+    // Show relevant section
+    if (userType === 'patient') {
+        patientDetails.style.display = 'block';
+    } else if (userType === 'doctor') {
+        doctorDetails.style.display = 'block';
+    } else if (userType === 'hospital_admin') {
+        hospitalDetails.style.display = 'block';
+    }
+}
+</script>
+{% endblock %}

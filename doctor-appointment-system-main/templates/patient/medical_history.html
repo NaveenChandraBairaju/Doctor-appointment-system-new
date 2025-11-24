@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Medical History{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 style="color: #000000 !important; font-family: 'Poppins', sans-serif; font-weight: 800;">My Medical History</h2>
+            <p style="color: #000000 !important; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 1.1rem;">Complete record of all your past appointments and treatments</p>
+            <hr>
+        </div>
+    </div>
+
+    {% if medical_history %}
+        {% for appointment in medical_history %}
+        <div class="card mb-3">
+            <div class="card-header bg-info text-white">
+                <div class="row">
+                    <div class="col-md-6">
+                        <strong>{{ appointment.appointment_time.strftime('%B %d, %Y at %I:%M %p') }}</strong>
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <span class="badge bg-light text-dark">{{ appointment.hospital.name }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Doctor:</strong> {{ appointment.doctor.user.name }}</p>
+                        <p><strong>Specialization:</strong> {{ appointment.doctor.specialization }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Completed:</strong> {{ appointment.completed_at.strftime('%B %d, %Y') if appointment.completed_at else 'N/A' }}</p>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <div class="row">
+                    <div class="col-md-12">
+                        <h5>Your Symptoms</h5>
+                        <p>{{ appointment.symptoms or 'No symptoms recorded' }}</p>
+                    </div>
+                </div>
+
+                {% if appointment.diagnosis %}
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5>Diagnosis</h5>
+                        <p class="alert alert-info">{{ appointment.diagnosis }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if appointment.prescription %}
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5>Prescription</h5>
+                        <div class="alert alert-warning">
+                            <pre style="white-space: pre-wrap; margin: 0;">{{ appointment.prescription }}</pre>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if appointment.treatment_plan %}
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5>Treatment Plan</h5>
+                        <p>{{ appointment.treatment_plan }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if appointment.test_results %}
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5>Test Results</h5>
+                        <p>{{ appointment.test_results }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if appointment.follow_up_date %}
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5>Follow-up Recommended</h5>
+                        <p class="text-primary"><strong>{{ appointment.follow_up_date.strftime('%B %d, %Y') }}</strong></p>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if appointment.notes %}
+                <div class="row mt-3">
+                    <div class="col-md-12">
+                        <h5>Additional Notes</h5>
+                        <p>{{ appointment.notes }}</p>
+                    </div>
+                </div>
+                {% endif %}
+
+                <div class="mt-3">
+                    <a href="{{ url_for('view_appointment_details', appointment_id=appointment.id) }}" class="btn btn-sm btn-primary">View Full Details</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <div class="alert alert-info">
+            <h4>No Medical History Yet</h4>
+            <p>Your completed appointments and medical records will appear here.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

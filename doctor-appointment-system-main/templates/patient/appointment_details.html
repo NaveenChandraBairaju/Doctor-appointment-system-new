@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block title %}Appointment Details{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-12">
+            <a href="{{ url_for('patient_dashboard') }}" class="btn btn-secondary mb-3">← Back to Dashboard</a>
+            <h2>Appointment Details</h2>
+            <hr>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header {% if appointment.status == 'completed' %}bg-success{% elif appointment.status == 'approved' %}bg-primary{% elif appointment.status == 'pending' %}bg-warning{% else %}bg-secondary{% endif %} text-white">
+            <h4>Status: {{ appointment.status.upper() }}</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Appointment Information</h5>
+                    <p><strong>Date & Time:</strong> {{ appointment.appointment_time.strftime('%B %d, %Y at %I:%M %p') }}</p>
+                    <p><strong>Hospital:</strong> {{ appointment.hospital.name }}</p>
+                    <p><strong>Address:</strong> {{ appointment.hospital.address }}</p>
+                    <p><strong>Contact:</strong> {{ appointment.hospital.contact }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Doctor Information</h5>
+                    <p><strong>Name:</strong> {{ appointment.doctor.user.name }}</p>
+                    <p><strong>Specialization:</strong> {{ appointment.doctor.specialization }}</p>
+                    <p><strong>Experience:</strong> {{ appointment.doctor.experience }} years</p>
+                    <p><strong>Consultation Fee:</strong> ${{ appointment.doctor.consultation_fee }}</p>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <h5>Your Symptoms</h5>
+                    <p>{{ appointment.symptoms or 'No symptoms recorded' }}</p>
+                </div>
+            </div>
+
+            {% if appointment.status == 'completed' %}
+            <hr>
+            <h4 class="text-success">Medical Records</h4>
+
+            {% if appointment.diagnosis %}
+            <div class="mt-3">
+                <h5>Diagnosis</h5>
+                <div class="alert alert-info">{{ appointment.diagnosis }}</div>
+            </div>
+            {% endif %}
+
+            {% if appointment.prescription %}
+            <div class="mt-3">
+                <h5>Prescription</h5>
+                <div class="alert alert-warning">
+                    <pre style="white-space: pre-wrap; margin: 0;">{{ appointment.prescription }}</pre>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if appointment.treatment_plan %}
+            <div class="mt-3">
+                <h5>Treatment Plan</h5>
+                <p>{{ appointment.treatment_plan }}</p>
+            </div>
+            {% endif %}
+
+            {% if appointment.test_results %}
+            <div class="mt-3">
+                <h5>Test Results</h5>
+                <p>{{ appointment.test_results }}</p>
+            </div>
+            {% endif %}
+
+            {% if appointment.follow_up_date %}
+            <div class="mt-3">
+                <h5>Follow-up Recommended</h5>
+                <p class="text-primary"><strong>{{ appointment.follow_up_date.strftime('%B %d, %Y') }}</strong></p>
+                <a href="{{ url_for('book_appointment', doctor_id=appointment.doctor_id) }}" class="btn btn-primary">Book Follow-up Appointment</a>
+            </div>
+            {% endif %}
+
+            {% if appointment.notes %}
+            <div class="mt-3">
+                <h5>Additional Notes</h5>
+                <p>{{ appointment.notes }}</p>
+            </div>
+            {% endif %}
+
+            <div class="mt-3">
+                <p><strong>Completed on:</strong> {{ appointment.completed_at.strftime('%B %d, %Y at %I:%M %p') if appointment.completed_at else 'N/A' }}</p>
+            </div>
+            {% endif %}
+
+            {% if appointment.status == 'pending' %}
+            <hr>
+            <div class="alert alert-warning">
+                <strong>Pending Approval:</strong> Your appointment is waiting for doctor approval.
+            </div>
+            {% endif %}
+
+            {% if appointment.status == 'approved' %}
+            <hr>
+            <div class="alert alert-success">
+                <strong>Approved:</strong> Your appointment has been confirmed. Please arrive 10 minutes early.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

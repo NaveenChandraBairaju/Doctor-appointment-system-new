@@ -1,0 +1,336 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+<style>
+.hero-title {
+    color: #000000 !important;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 3.5rem;
+    letter-spacing: -1px;
+    margin-bottom: 1rem;
+}
+
+.hero-subtitle {
+    color: #000000 !important;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 1.5rem;
+    letter-spacing: 0.5px;
+}
+
+/* Stats Section */
+.stat-box {
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+}
+
+.stat-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.stat-box i {
+    color: #4e73df;
+}
+
+.stat-box h2 {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 800;
+    font-size: 2.5rem;
+    margin: 1rem 0;
+}
+
+.stat-box p {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* Features Section */
+.section-heading {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+}
+
+.feature-box {
+    padding: 2rem;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    height: 100%;
+}
+
+.feature-box:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.feature-box i {
+    color: #1cc88a;
+}
+
+.feature-box h4 {
+    color: #000000;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin: 1rem 0;
+}
+
+.feature-box p {
+    color: #333333;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Login/Register Cards Styling */
+.card {
+    background: linear-gradient(145deg, #f0f4ff 0%, #e6eeff 100%) !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.card:hover {
+    transform: translateY(-5px) !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-title {
+    color: #000000 !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 700 !important;
+    font-size: 1.5rem !important;
+}
+
+/* Patient Login Button - Highlighted */
+.btn-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4) !important;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6) !important;
+}
+
+/* Register as Patient Button - Outlined with hover effect */
+.btn-outline-primary {
+    background: transparent !important;
+    border: 2px solid #667eea !important;
+    color: #667eea !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-outline-primary:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-color: #667eea !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4) !important;
+}
+
+/* Hospital Login Button - Highlighted */
+.btn-success {
+    background: linear-gradient(135deg, #1cc88a 0%, #17a673 100%) !important;
+    border: none !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease !important;
+    box-shadow: 0 4px 15px rgba(28, 200, 138, 0.4) !important;
+}
+
+.btn-success:hover {
+    background: linear-gradient(135deg, #17a673 0%, #138f61 100%) !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(28, 200, 138, 0.6) !important;
+}
+
+/* Register Hospital Button - Outlined with hover effect */
+.btn-outline-success {
+    background: transparent !important;
+    border: 2px solid #1cc88a !important;
+    color: #1cc88a !important;
+    font-weight: 600 !important;
+    padding: 0.75rem 1.5rem !important;
+    border-radius: 10px !important;
+    transition: all 0.3s ease !important;
+}
+
+.btn-outline-success:hover {
+    background: linear-gradient(135deg, #1cc88a 0%, #17a673 100%) !important;
+    border-color: #1cc88a !important;
+    color: #ffffff !important;
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 20px rgba(28, 200, 138, 0.4) !important;
+}
+
+/* Our Hospitals Heading */
+.hospitals-heading {
+    color: #000000 !important;
+    font-family: 'Poppins', sans-serif !important;
+    font-weight: 800 !important;
+    font-size: 2rem !important;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 text-center mb-5">
+            <h1 class="hero-title">Doctors Appointment Booking System</h1>
+            <p class="hero-subtitle">Your gateway to seamless healthcare appointments</p>
+        </div>
+    </div>
+
+    <!-- Login/Register Cards -->
+    <div class="row justify-content-center mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">For Patients</h3>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('login', user_type='patient') }}" class="btn btn-primary">Patient Login</a>
+                        <a href="{{ url_for('register', user_type='patient') }}" class="btn btn-outline-primary">Register as Patient</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h3 class="card-title">For Hospitals</h3>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('login', user_type='hospital_admin') }}" class="btn btn-success">Hospital Login</a>
+                        <a href="{{ url_for('register_hospital') }}" class="btn btn-outline-success">Register Hospital</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Section -->
+    <div class="row text-center mb-5">
+        <div class="col-md-4 mb-4">
+            <div class="stat-box">
+                <i class="fas fa-user-md fa-3x mb-3"></i>
+                <h2>1000+</h2>
+                <p>Verified Doctors</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="stat-box">
+                <i class="fas fa-hospital fa-3x mb-3"></i>
+                <h2>150+</h2>
+                <p>Partner Hospitals</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="stat-box">
+                <i class="fas fa-calendar-check fa-3x mb-3"></i>
+                <h2>5000+</h2>
+                <p>Monthly Appointments</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="row mb-5">
+        <div class="col-12 text-center mb-4">
+            <h2 class="section-heading">Why Choose Our Appointment System?</h2>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-clock fa-2x mb-3"></i>
+                <h4>Quick Booking</h4>
+                <p>Book appointments in just a few clicks</p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-calendar-alt fa-2x mb-3"></i>
+                <h4>Flexible Scheduling</h4>
+                <p>Choose from multiple time slots</p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-star fa-2x mb-3"></i>
+                <h4>Verified Doctors</h4>
+                <p>Only certified medical professionals</p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-calendar-check fa-2x mb-3"></i>
+                <h4>24/7 Booking</h4>
+                <p>Book appointments anytime, anywhere</p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-robot fa-2x mb-3"></i>
+                <h4>AI Assistant</h4>
+                <p>Get instant medical advice and symptom guidance from our AI chatbot</p>
+            </div>
+        </div>
+        <div class="col-lg-4 col-md-6 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-shield-alt fa-2x mb-3"></i>
+                <h4>Secure System</h4>
+                <p>Your health data is protected</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <h2 class="text-center mb-4 hospitals-heading">Our Hospitals</h2>
+            <div class="row row-cols-1 row-cols-md-3 g-4">
+                {% for hospital in hospitals %}
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ hospital.name }}</h5>
+                            <p class="card-text">{{ hospital.description[:150] + '...' if hospital.description else 'No description available' }}</p>
+                            <p class="card-text"><small class="text-muted"><i class="fas fa-map-marker-alt"></i> {{ hospital.address }}</small></p>
+                            <a href="{{ url_for('login', user_type='patient', next=url_for('hospital_details', hospital_id=hospital.id)) }}" 
+                               class="btn btn-primary btn-sm">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
